@@ -20,7 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
@@ -39,13 +41,32 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //DemoText(message = "Welcome to Android", fontSize = 12f)
 
-                    DemoScreen()
-                    highOrderFunctionExample.main01()
-
+                    //DemoScreen()
+                    //highOrderFunctionExample.main01()
+                    TestFunction()
                 }
             }
         }
     }
+}
+
+@Composable
+fun TestFunction() {
+    Text(text = "Hello")
+}
+
+@Composable
+fun CustomText(text: String, fontWeight: FontWeight, color: Color) {
+    Text(text = text, fontWeight = fontWeight, color = color )
+}
+
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
 }
 
 @Composable
