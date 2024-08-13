@@ -21,12 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
 
 class MainActivity : ComponentActivity() {
+
+    var highOrderFunctionExample = HighOrderFunctionExample()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,6 +40,8 @@ class MainActivity : ComponentActivity() {
                     //DemoText(message = "Welcome to Android", fontSize = 12f)
 
                     DemoScreen()
+                    highOrderFunctionExample.main01()
+
                 }
             }
         }
