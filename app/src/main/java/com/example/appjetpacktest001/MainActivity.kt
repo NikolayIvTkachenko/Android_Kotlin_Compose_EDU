@@ -2,6 +2,7 @@ package com.example.appjetpacktest001
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -73,13 +75,76 @@ class MainActivity : ComponentActivity() {
 //                        FunctionA()
 //                    }
 
-                    DemoScreen02()
+                    //DemoScreen02()
+                    //SlotDemo{ButtonDemo()}
+
+                    SlotDemo002(
+                        topContent = { Text(text = "Top Text") },
+                        middleContent = { ButtonDemo() },
+                        bottomContent = { Text(text = "Bottom Text") }
+                    )
                 }
             }
         }
     }
 }
 
+
+@Composable
+fun SlotDemo002(
+    topContent: @Composable () -> Unit,
+    middleContent: @Composable () -> Unit,
+    bottomContent: @Composable () -> Unit
+) {
+    Column {
+        topContent()
+        middleContent()
+        bottomContent()
+    }
+}
+
+
+//@Composable
+//fun SlotDemo() {
+//    Column {
+//        Text(text = "Top text")
+//        Text(text = "Middle Text")
+//        Text(text = "Bottom Text")
+//    }
+//}
+
+@Composable
+fun ButtonDemo() {
+    Button(onClick = { Log.d("TEST01", "Press CLICK")}) {
+        Text(text = "Click me")
+    }
+}
+
+@Composable
+fun SlotDemo(middleContent: @Composable () -> Unit) {
+    Column {
+        Text(text = "Top text")
+        middleContent()
+        Text(text = "Bottom Text")
+    }
+}
+
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DefaultPreview() {
+
+    AppJetPackTest001Theme {
+        //SlotDemo{ButtonDemo()}
+        SlotDemo002(
+            topContent = { Text(text = "Top Text") },
+            middleContent = { ButtonDemo() },
+            bottomContent = { Text(text = "Bottom Text") }
+        )
+    }
+}
+
+//========================================================================================================
 @Composable
 fun Composable1() {
     //val background = LocalColor.current
@@ -276,23 +341,23 @@ fun TextField02() {
 
 
 //@Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DefaultPreview() {
-    //CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
-
-    AppJetPackTest001Theme {
-//        Column {
-//            CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
-//            CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
-//            TextField01()
-//            TextField02()
-//            FunctionA()
-//        }
-
-        DemoScreen02()
-    }
-}
+//@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+//@Composable
+//fun DefaultPreview() {
+//    //CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+//
+//    AppJetPackTest001Theme {
+////        Column {
+////            CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+////            CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
+////            TextField01()
+////            TextField02()
+////            FunctionA()
+////        }
+//
+//        //DemoScreen02()
+//    }
+//}
 
 @Composable
 fun DemoText(message: String, fontSize: Float) {
