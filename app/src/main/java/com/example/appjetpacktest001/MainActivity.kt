@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,12 +46,51 @@ class MainActivity : ComponentActivity() {
 
                     //DemoScreen()
                     //highOrderFunctionExample.main01()
-                    TestFunction()
+                    //TestFunction()
+                    //CustomSwitch()
+
+                    Column {
+                        CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+                        CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
+                        TextField01()
+                        TextField02()
+                    }
                 }
             }
         }
     }
 }
+
+@Composable
+fun CustomSwitch() {
+    val checked = remember {
+        mutableStateOf(true)
+    }
+
+    Column {
+        Switch(
+            checked = checked.value,
+            onCheckedChange = { checked.value = it}
+        )
+        if(checked.value) {
+            Text(text = "Switch is On")
+        } else {
+            Text(text = "Switch is Off")
+        }
+    }
+}
+
+@Composable
+fun CustomList(items: List<String>) {
+    Column{
+        for(item in items) {
+            Text(text = item)
+            Divider(color = Color.Black)
+        }
+    }
+}
+
+
 
 @Composable
 fun TestFunction() {
@@ -60,13 +102,55 @@ fun CustomText(text: String, fontWeight: FontWeight, color: Color) {
     Text(text = text, fontWeight = fontWeight, color = color )
 }
 
+//@Composable
+//fun TextField01() {
+//    var textText = ""
+//    val onTextChange = {text: String ->
+//        textText = text
+//    }
+//
+//    TextField(value = textText, onValueChange = onTextChange)
+//}
 
+@Composable
+fun TextField01() {
+    var textText by remember {
+        mutableStateOf("Test")
+    }
+    val onTextChange = {text: String ->
+        textText = text
+    }
+
+    TextField(value = textText, onValueChange = onTextChange)
+}
+
+@Composable
+fun TextField02() {
+    var textText = remember {
+        mutableStateOf("")
+    }
+    val onTextChange = {text: String ->
+        textText.value = text
+    }
+
+    TextField(value = textText.value, onValueChange = onTextChange)
+}
 
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+    //CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+
+    AppJetPackTest001Theme {
+        Column {
+            CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+            CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
+            TextField01()
+            TextField02()
+        }
+
+    }
 }
 
 @Composable
