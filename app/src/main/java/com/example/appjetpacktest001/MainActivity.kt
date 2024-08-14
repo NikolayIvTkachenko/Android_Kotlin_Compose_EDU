@@ -1,8 +1,11 @@
 package com.example.appjetpacktest001
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
@@ -17,11 +21,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,9 +38,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
 
+val color1 = Color.Blue
+//val LocalColor = compositionLocalOf { Color.Red }
+val LocalColor = staticCompositionLocalOf { Color.Red }
+
 class MainActivity : ComponentActivity() {
 
     var highOrderFunctionExample = HighOrderFunctionExample()
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +80,77 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun Composable1() {
+    //val background = LocalColor.current
+//    CompositionLocalProvider(LocalColor provides color) {
+//
+//    }
+
+    var color = if(isSystemInDarkTheme()) {
+        Color(0xFFa08d87)
+    } else {
+        Color(0xFFffdbcf)
+    }
+
+    Column {
+        Composable2()
+        CompositionLocalProvider(LocalColor provides color1) {
+            Composable3()
+        }
+//        CompositionLocalProvider(LocalColor provides color) {
+//            Composable3()
+//        }
+    }
+
+}
+
+
+@Composable
+fun Composable2() {
+    Composable4()
+}
+
+@Composable
+fun Composable3() {
+    Text(text = "Composable 3", modifier = Modifier.background(LocalColor.current))
+    CompositionLocalProvider(LocalColor provides Color.Red) {
+        Composable5()
+    }
+
+}
+
+@Composable
+fun Composable4() {
+    Composable6()
+}
+
+@Composable
+fun Composable5() {
+    Text(text = "Composable 5", modifier = Modifier.background(LocalColor.current))
+    CompositionLocalProvider(LocalColor provides Color.Green) {
+        Composable7()
+    }
+    CompositionLocalProvider(LocalColor provides Color.Yellow) {
+        Composable8()
+    }
+
+}
+
+@Composable
+fun Composable6() {
+    Text("Composable 6")
+}
+
+@Composable
+fun Composable7() {
+    Text("Composable 7", modifier = Modifier.background(LocalColor.current))
+}
+
+@Composable
+fun Composable8() {
+    Text("Composable 8", modifier = Modifier.background(LocalColor.current))
+}
 
 
 //Statefull component
@@ -84,6 +170,7 @@ fun DemoScreen02(){
     Column {
         TextField003(text = textState, onTextChange = onTextChange)
         TextField003(text = textState, onTextChange = onTextChange)
+        Composable1()
     }
 
 }
@@ -188,7 +275,8 @@ fun TextField02() {
 }
 
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun DefaultPreview() {
     //CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
