@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,16 +50,49 @@ class MainActivity : ComponentActivity() {
                     //TestFunction()
                     //CustomSwitch()
 
-                    Column {
-                        CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
-                        CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
-                        TextField01()
-                        TextField02()
-                    }
+//                    Column {
+//                        CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+//                        CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
+//                        TextField01()
+//                        TextField02()
+//                        FunctionA()
+//                    }
+
+                    DemoScreen02()
                 }
             }
         }
     }
+}
+
+
+
+//Statefull component
+@Composable
+fun DemoScreen02(){
+//    var textState by remember {
+//        mutableStateOf("")
+//    }
+
+    var textState by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    val onTextChange = { text: String ->
+        textState = text
+    }
+    Column {
+        TextField003(text = textState, onTextChange = onTextChange)
+        TextField003(text = textState, onTextChange = onTextChange)
+    }
+
+}
+
+
+//Stateless componnt
+@Composable
+fun TextField003(text: String, onTextChange : (String) -> Unit) {
+    TextField(value = text, onValueChange = onTextChange)
 }
 
 @Composable
@@ -91,6 +125,23 @@ fun CustomList(items: List<String>) {
 }
 
 
+@Composable
+fun FunctionA() {
+    var switchState by remember {
+        mutableStateOf(true)
+    }
+
+    val onSwitchChange = { value: Boolean ->
+        switchState = value
+    }
+
+    FunctionB(switchState = switchState, onSwichChange = onSwitchChange)
+}
+
+@Composable
+fun FunctionB(switchState: Boolean, onSwichChange: (Boolean) -> Unit) {
+    Switch(checked = switchState, onCheckedChange = onSwichChange)
+}
 
 @Composable
 fun TestFunction() {
@@ -143,13 +194,15 @@ fun DefaultPreview() {
     //CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
 
     AppJetPackTest001Theme {
-        Column {
-            CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
-            CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
-            TextField01()
-            TextField02()
-        }
+//        Column {
+//            CustomText(text = "TEST COMPOSE", fontWeight = FontWeight.Bold, color = Color.Green)
+//            CustomList(items = listOf("One", "Two", "Three", "Four", "Five", "Six"))
+//            TextField01()
+//            TextField02()
+//            FunctionA()
+//        }
 
+        DemoScreen02()
     }
 }
 
