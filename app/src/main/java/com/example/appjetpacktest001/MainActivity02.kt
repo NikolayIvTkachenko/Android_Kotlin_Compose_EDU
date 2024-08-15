@@ -5,6 +5,7 @@ import android.widget.CheckBox
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -55,7 +58,7 @@ class MainActivity02 : ComponentActivity() {
                     //MainScreen()
                     //DemoScreen000()
                     //MainScreen02()
-                    MainScreen03()
+                    //MainScreen03()
                 }
             }
         }
@@ -66,14 +69,59 @@ class MainActivity02 : ComponentActivity() {
 
 @Composable
 fun MainScreen03() {
-    Box {
-        val height = 200.dp
-        val width = 200.dp
 
-        TextCellV3(text = "1", modifier = Modifier.size(width = width, height = height))
-        TextCellV3(text = "2", modifier = Modifier.size(width = width, height = height))
-        TextCellV3(text = "3", modifier = Modifier.size(width = width, height = height))
+    Column {
+
+        Box(
+            Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(Color.Blue))
+        Spacer(modifier = Modifier.height(5.dp))
+        Box(
+            Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(Color.Blue))
+        Spacer(modifier = Modifier.height(20.dp))
+        Box(
+            Modifier
+                .size(100.dp)
+                .clip(CutCornerShape(15.dp))
+                .background(Color.Blue))
+
+        Box(
+            modifier = Modifier.size(height = 90.dp, width = 290.dp)
+        ){
+            Text(text = "TopStart", Modifier.align(Alignment.TopStart))
+            Text(text = "TopCenter", Modifier.align(Alignment.TopCenter))
+            Text(text = "TopEnd", Modifier.align(Alignment.TopEnd))
+
+            Text(text = "CenterStart", Modifier.align(Alignment.CenterStart))
+            Text(text = "Center", Modifier.align(Alignment.Center))
+            Text(text = "CenterEnd", Modifier.align(Alignment.CenterEnd))
+
+            Text(text = "BottomStart", Modifier.align(Alignment.BottomStart))
+            Text(text = "BottomCenter", Modifier.align(Alignment.BottomCenter))
+            Text(text = "BottomEnd", Modifier.align(Alignment.BottomEnd))
+        }
+
+
+        Box(
+            contentAlignment = Alignment.CenterEnd,
+            modifier = Modifier.size(400.dp, 400.dp)
+        ) {
+            val height = 200.dp
+            val width = 200.dp
+
+            TextCellV3(text = "1", modifier = Modifier.size(width = width, height = height))
+            TextCellV3(text = "2", modifier = Modifier.size(width = width, height = height))
+            TextCellV3(text = "3", modifier = Modifier.size(width = width, height = height))
+        }
     }
+
+
+
 }
 
 @Composable
