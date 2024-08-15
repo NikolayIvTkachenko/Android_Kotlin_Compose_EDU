@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
+import kotlin.math.roundToInt
 
 class MainActivity02 : ComponentActivity() {
 
@@ -59,6 +61,8 @@ class MainActivity02 : ComponentActivity() {
                     //DemoScreen000()
                     //MainScreen02()
                     //MainScreen03()
+                    //MainScreen04()
+                    MainScreen05()
                 }
             }
         }
@@ -67,8 +71,74 @@ class MainActivity02 : ComponentActivity() {
 }
 
 
+
+@Composable
+fun MainScreen05() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(120.dp, 80.dp)
+    ) {
+        Column {
+            ColorBox(modifier = Modifier.exampleLayout(0f).background(Color.Blue))
+            ColorBox(modifier = Modifier.exampleLayout(0.25f).background(Color.Green))
+            ColorBox(modifier = Modifier.exampleLayout(0.5f).background(Color.Yellow))
+            ColorBox(modifier = Modifier.exampleLayout(0.25f).background(Color.Red))
+            ColorBox(modifier = Modifier.exampleLayout(0.0f).background(Color.Magenta))
+        }
+    }
+}
+
+
+@Composable
+fun MainScreen04() {
+    Box(modifier = Modifier.size(120.dp, 80.dp)) {
+        ColorBox(
+            modifier = Modifier
+                .exampleLayout(200, 120)
+                .background(Color.Blue)
+        )
+    }
+
+}
+
+@Composable
+fun ColorBox(modifier: Modifier) {
+    Box(
+        Modifier
+            .padding(1.dp)
+            .size(width = 50.dp, height = 10.dp)
+            .then(modifier))
+}
+
+//Create a custom layout modifier
+fun Modifier.exampleLayout(
+    x: Int,
+    y: Int
+): Modifier = this.layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    layout(placeable.width, placeable.height) {
+        placeable.placeRelative(x, y)
+    }
+}
+
+fun Modifier.exampleLayout(
+    fraction: Float
+): Modifier = this.layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+
+    val x = -(placeable.width * fraction).roundToInt()
+
+    layout(placeable.width, placeable.height) {
+        placeable.placeRelative(x = x, y = 0)
+    }
+}
+
+
+
 @Composable
 fun MainScreen03() {
+
+
 
     Column {
 
@@ -401,7 +471,9 @@ fun TitleImage(drawing: Int) {
 fun DemoPreview() {
     //DemoScreen000()
     //MainScreen02()
-    MainScreen03()
+    //MainScreen03()
+    //MainScreen04()
+    MainScreen05()
 
 //    CheckBoxes(
 //        linearSelected = true,
