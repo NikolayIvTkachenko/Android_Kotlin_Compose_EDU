@@ -36,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
+
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,7 +55,7 @@ class MainActivity02 : ComponentActivity() {
 
         setContent {
             AppJetPackTest001Theme {
-                Surface (
+                Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
@@ -62,7 +64,8 @@ class MainActivity02 : ComponentActivity() {
                     //MainScreen02()
                     //MainScreen03()
                     //MainScreen04()
-                    MainScreen05()
+                    //MainScreen05()
+                    MainScreen06()
                 }
             }
         }
@@ -70,6 +73,81 @@ class MainActivity02 : ComponentActivity() {
     }
 }
 
+
+@Composable
+fun MainScreen06() {
+
+    DoNothingLayout(Modifier.padding(8.dp)) {
+        Column {
+            Text(text = "Text Line 1")
+            Text(text = "Text Line 2")
+            Text(text = "Text Line 3")
+            Text(text = "Text Line 4")
+        }
+    }
+
+    Box{
+        CascadeLayout(spacing = 20) {
+            Box(modifier = Modifier.size(60.dp).background(Color.Blue))
+            Box(modifier = Modifier.size(80.dp, 40.dp).background(Color.Red))
+            Box(modifier = Modifier.size(90.dp, 100.dp).background(Color.Cyan))
+            Box(modifier = Modifier.size(50.dp).background(Color.Magenta))
+            Box(modifier = Modifier.size(70.dp).background(Color.Green))
+        }
+    }
+
+}
+
+@Composable
+fun DoNothingLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        val placebles = measurables.map { measurable ->
+            measurable.measure(constraints)
+        }
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            placebles.forEach { placeble ->
+                placeble.placeRelative(x = 0, y = 0)
+            }
+        }
+    }
+}
+
+@Composable
+fun CascadeLayout(
+    modifier: Modifier = Modifier,
+    spacing: Int = 0,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) { measurables, constraints ->
+        var indent = 0
+
+        val placebles = measurables.map { measurable ->
+            measurable.measure(constraints)
+        }
+
+
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            var yCoord = 0
+
+            placebles.forEach { placeable ->
+                placeable.placeRelative(x = indent, y = yCoord)
+                indent += placeable.width + spacing
+                yCoord += placeable.height + spacing
+            }
+        }
+
+    }
+}
 
 
 @Composable
@@ -79,11 +157,31 @@ fun MainScreen05() {
         modifier = Modifier.size(120.dp, 80.dp)
     ) {
         Column {
-            ColorBox(modifier = Modifier.exampleLayout(0f).background(Color.Blue))
-            ColorBox(modifier = Modifier.exampleLayout(0.25f).background(Color.Green))
-            ColorBox(modifier = Modifier.exampleLayout(0.5f).background(Color.Yellow))
-            ColorBox(modifier = Modifier.exampleLayout(0.25f).background(Color.Red))
-            ColorBox(modifier = Modifier.exampleLayout(0.0f).background(Color.Magenta))
+            ColorBox(
+                modifier = Modifier
+                    .exampleLayout(0f)
+                    .background(Color.Blue)
+            )
+            ColorBox(
+                modifier = Modifier
+                    .exampleLayout(0.25f)
+                    .background(Color.Green)
+            )
+            ColorBox(
+                modifier = Modifier
+                    .exampleLayout(0.5f)
+                    .background(Color.Yellow)
+            )
+            ColorBox(
+                modifier = Modifier
+                    .exampleLayout(0.25f)
+                    .background(Color.Red)
+            )
+            ColorBox(
+                modifier = Modifier
+                    .exampleLayout(0.0f)
+                    .background(Color.Magenta)
+            )
         }
     }
 }
@@ -107,7 +205,8 @@ fun ColorBox(modifier: Modifier) {
         Modifier
             .padding(1.dp)
             .size(width = 50.dp, height = 10.dp)
-            .then(modifier))
+            .then(modifier)
+    )
 }
 
 //Create a custom layout modifier
@@ -134,10 +233,8 @@ fun Modifier.exampleLayout(
 }
 
 
-
 @Composable
 fun MainScreen03() {
-
 
 
     Column {
@@ -146,23 +243,26 @@ fun MainScreen03() {
             Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(Color.Blue))
+                .background(Color.Blue)
+        )
         Spacer(modifier = Modifier.height(5.dp))
         Box(
             Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(15.dp))
-                .background(Color.Blue))
+                .background(Color.Blue)
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Box(
             Modifier
                 .size(100.dp)
                 .clip(CutCornerShape(15.dp))
-                .background(Color.Blue))
+                .background(Color.Blue)
+        )
 
         Box(
             modifier = Modifier.size(height = 90.dp, width = 290.dp)
-        ){
+        ) {
             Text(text = "TopStart", Modifier.align(Alignment.TopStart))
             Text(text = "TopCenter", Modifier.align(Alignment.TopCenter))
             Text(text = "TopEnd", Modifier.align(Alignment.TopEnd))
@@ -189,7 +289,6 @@ fun MainScreen03() {
             TextCellV3(text = "3", modifier = Modifier.size(width = width, height = height))
         }
     }
-
 
 
 }
@@ -245,13 +344,19 @@ fun MainScreen02() {
 
         Row(
             modifier = Modifier.height(350.dp)
-        ){
-            TextCell(text = "1",
-                modifier = Modifier.align(Alignment.Top))
-            TextCell(text = "2",
-                modifier = Modifier.align(Alignment.CenterVertically))
-            TextCell(text = "3",
-                modifier = Modifier.align(Alignment.Bottom))
+        ) {
+            TextCell(
+                text = "1",
+                modifier = Modifier.align(Alignment.Top)
+            )
+            TextCell(
+                text = "2",
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+            TextCell(
+                text = "3",
+                modifier = Modifier.align(Alignment.Bottom)
+            )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -327,7 +432,6 @@ fun CustomImage(image: Int, modifier: Modifier = Modifier) {
 }
 
 
-
 @Composable
 fun DemoScreen000() {
     val modifierText = Modifier
@@ -360,19 +464,16 @@ fun DemoScreen000() {
 }
 
 
-
-
-
 @Composable
 fun MainScreen() {
     var linearSelected by remember { mutableStateOf(true) }
     var imageSelected by remember { mutableStateOf(true) }
 
-    val onLinearClick = { value : Boolean ->
+    val onLinearClick = { value: Boolean ->
         linearSelected = value
     }
 
-    val onTitleClick = { value : Boolean ->
+    val onTitleClick = { value: Boolean ->
         imageSelected = value
     }
 
@@ -383,7 +484,7 @@ fun MainScreen() {
         onLinearClick = onLinearClick,
         onTitleClick = onTitleClick,
         titleContent = {
-            if(imageSelected) {
+            if (imageSelected) {
                 TitleImage(drawing = R.drawable.download_app)
             } else {
                 Text(
@@ -394,12 +495,12 @@ fun MainScreen() {
             }
         },
         progressContent = {
-            if(linearSelected) {
+            if (linearSelected) {
                 LinearProgressIndicator(Modifier.height(40.dp))
             } else {
                 CircularProgressIndicator(
                     modifier = Modifier.size(200.dp),
-                    strokeWidth =  18.dp
+                    strokeWidth = 18.dp
                 )
             }
         }
@@ -429,12 +530,13 @@ fun ScreenContent(
             linearSelected = linearSelected,
             imageSelected = imageSelected,
             onTitleClick = onTitleClick,
-            onLinearClick = onLinearClick)
+            onLinearClick = onLinearClick
+        )
     }
 }
 
 @Composable
-fun CheckBoxes (
+fun CheckBoxes(
     linearSelected: Boolean,
     imageSelected: Boolean,
     onTitleClick: (Boolean) -> Unit,
@@ -473,7 +575,8 @@ fun DemoPreview() {
     //MainScreen02()
     //MainScreen03()
     //MainScreen04()
-    MainScreen05()
+    //MainScreen05()
+    MainScreen06()
 
 //    CheckBoxes(
 //        linearSelected = true,
