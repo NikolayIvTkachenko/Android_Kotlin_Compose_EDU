@@ -5,6 +5,7 @@ import android.widget.CheckBox
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
@@ -27,9 +29,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
 
 class MainActivity02 : ComponentActivity() {
@@ -43,13 +50,129 @@ class MainActivity02 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    //MainScreen()
+                    //DemoScreen000()
+                    MainScreen02()
                 }
             }
         }
 
     }
 }
+
+
+@Composable
+fun MainScreen02() {
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.size(width = 400.dp, height = 400.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(150.dp)
+            ) {
+                TextCell(text = "1")
+                TextCell(text = "2")
+                TextCell(text = "3")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextCell(text = "4")
+                TextCell(text = "5")
+                TextCell(text = "6")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TextCell(text = "7")
+                TextCell(text = "8")
+                TextCell(text = "9")
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.size(width = 400.dp, height = 200.dp)
+        ) {
+            TextCell(text = "10")
+            TextCell(text = "11")
+            TextCell(text = "12")
+        }
+    }
+
+}
+
+@Composable
+fun TextCell(text: String, modifier: Modifier = Modifier) {
+    val cellModifier = Modifier
+        .padding(4.dp)
+        .size(100.dp, 100.dp)
+        .border(width = 4.dp, color = Color.Black)
+
+    Text(
+        text = text,
+        cellModifier.then(modifier),
+        fontSize = 70.sp,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
+}
+
+
+@Composable
+fun CustomImage(image: Int) {
+    Image(
+        painter = painterResource(image),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun CustomImage(image: Int, modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(image),
+        contentDescription = null,
+        modifier
+    )
+}
+
+
+
+@Composable
+fun DemoScreen000() {
+    val modifierText = Modifier
+        .border(width = 2.dp, color = Color.Black)
+        .padding(all = 10.dp)
+
+    val secondModifierText = Modifier.height(100.dp)
+
+    Column(
+        Modifier.padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Test Data",
+            modifier = modifierText.then(secondModifierText), //modifierText,
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomImage(
+            image = R.drawable.girl,
+            Modifier
+                .padding(16.dp)
+                .width(270.dp)
+                .clip(shape = RoundedCornerShape(30.dp))
+        )
+    }
+
+}
+
+
+
+
 
 @Composable
 fun MainScreen() {
@@ -154,13 +277,16 @@ fun TitleImage(drawing: Int) {
 }
 
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun DemoPreview() {
-    CheckBoxes(
-        linearSelected = true,
-        imageSelected = true,
-        onTitleClick = { },
-        onLinearClick = { }
-    )
+    //DemoScreen000()
+    MainScreen02()
+
+//    CheckBoxes(
+//        linearSelected = true,
+//        imageSelected = true,
+//        onTitleClick = { },
+//        onLinearClick = { }
+//    )
 }
