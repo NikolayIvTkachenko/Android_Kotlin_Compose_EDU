@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,7 +54,8 @@ class MainActivity02 : ComponentActivity() {
                 ) {
                     //MainScreen()
                     //DemoScreen000()
-                    MainScreen02()
+                    //MainScreen02()
+                    MainScreen03()
                 }
             }
         }
@@ -62,8 +65,76 @@ class MainActivity02 : ComponentActivity() {
 
 
 @Composable
+fun MainScreen03() {
+    Box {
+        val height = 200.dp
+        val width = 200.dp
+
+        TextCellV3(text = "1", modifier = Modifier.size(width = width, height = height))
+        TextCellV3(text = "2", modifier = Modifier.size(width = width, height = height))
+        TextCellV3(text = "3", modifier = Modifier.size(width = width, height = height))
+    }
+}
+
+@Composable
+fun TextCellV3(text: String, modifier: Modifier = Modifier, fontSize: Int = 150) {
+    val cellModifier = Modifier
+        .padding(4.dp)
+        .border(width = 5.dp, color = Color.Black)
+    Surface {
+        Text(
+            text = text,
+            cellModifier.then(modifier),
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+    }
+
+
+}
+
+
+@Composable
 fun MainScreen02() {
     Column {
+
+        Row {
+            TextCell(text = "1", modifier = Modifier.weight(weight = 0.2f, fill = true))
+            TextCell(text = "2", modifier = Modifier.weight(weight = 0.4f, fill = true))
+            TextCell(text = "3", modifier = Modifier.weight(weight = 0.3f, fill = true))
+        }
+        Row {
+            TextCell(text = "4", modifier = Modifier.weight(weight = 0.2f, fill = true))
+            TextCell(text = "5", modifier = Modifier.weight(weight = 0.2f, fill = true))
+            TextCell(text = "6", modifier = Modifier.weight(weight = 0.2f, fill = true))
+        }
+
+        Row {
+            Text(
+                text = "Large Text",
+                //modifier = Modifier.alignByBaseline(),
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Small Text",
+                //modifier = Modifier.alignByBaseline(),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Row(
+            modifier = Modifier.height(350.dp)
+        ){
+            TextCell(text = "1",
+                modifier = Modifier.align(Alignment.Top))
+            TextCell(text = "2",
+                modifier = Modifier.align(Alignment.CenterVertically))
+            TextCell(text = "3",
+                modifier = Modifier.align(Alignment.Bottom))
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.size(width = 400.dp, height = 400.dp)
@@ -281,7 +352,8 @@ fun TitleImage(drawing: Int) {
 @Composable
 fun DemoPreview() {
     //DemoScreen000()
-    MainScreen02()
+    //MainScreen02()
+    MainScreen03()
 
 //    CheckBoxes(
 //        linearSelected = true,
