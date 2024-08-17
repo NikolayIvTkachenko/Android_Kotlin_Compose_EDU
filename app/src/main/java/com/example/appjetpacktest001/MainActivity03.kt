@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -67,14 +70,28 @@ class MainActivity03 : ComponentActivity() {
 
 @Composable
 fun MainScreenDemo008() {
+    val scrollState = rememberScrollState()
 
+    Row(modifier = Modifier.horizontalScroll(scrollState)) {
+        repeat(100) {
+            TestListItem()
+        }
+    }
+
+//    Column(modifier = Modifier.verticalScroll(scrollState)) {
+//        repeat(100) { index ->
+//            Text(text = "Text sample = $index")
+//        }
+//    }
 }
+
+
 
 @Composable
 fun MainScreenDemo007() {
     Column {
         LazyColumn {
-            items(10) {index ->
+            items(10) { index ->
                 Text(text = "Text sample = $index")
             }
         }
@@ -82,7 +99,7 @@ fun MainScreenDemo007() {
         val colorNameList = listOf("Red", "Green", "Blue", "Indigo")
 
         LazyColumn {
-            itemsIndexed(colorNameList) {index, item ->
+            itemsIndexed(colorNameList) { index, item ->
                 Text(text = "$index = $item")
             }
         }
@@ -93,7 +110,7 @@ fun MainScreenDemo007() {
 fun MainScreenDemo006() {
     Column {
         Row {
-            repeat(100){
+            repeat(100) {
                 TestListItem()
             }
         }
@@ -106,12 +123,12 @@ fun MainScreenDemo006() {
 
 @Composable
 fun TestListItem() {
-    Text(text = "Test")
+    Text(text = "Test N ")
 }
 
 
 @Composable
-fun TestTextField03(text: String, onTextChange : (String) -> Unit) {
+fun TestTextField03(text: String, onTextChange: (String) -> Unit) {
     TextField(value = text, onValueChange = onTextChange)
 }
 
@@ -135,14 +152,15 @@ fun MainScreenDemo005() {
             modifier = Modifier.width(IntrinsicSize.Min)
         ) {
             Text(modifier = Modifier.padding(start = 4.dp), text = textState)
-            Box(modifier = Modifier
-                .height(10.dp)
-                .fillMaxWidth()
-                .background(Color.Blue))
+            Box(
+                modifier = Modifier
+                    .height(10.dp)
+                    .fillMaxWidth()
+                    .background(Color.Blue)
+            )
         }
         TestTextField03(text = textState, onTextChange = onTextChange)
     }
-
 
 
 //    Row(modifier = Modifier.width(IntrinsicSize.Min)) {
@@ -154,7 +172,7 @@ fun MainScreenDemo005() {
 @Composable
 fun MainScreenDemo004() {
 
-    ConstraintLayout(modifier =  Modifier.size(width = 550.dp, height = 220.dp)) {
+    ConstraintLayout(modifier = Modifier.size(width = 550.dp, height = 220.dp)) {
         val (button1, button2, button3, button4) = createRefs()
 
         val barrier = createEndBarrier(button1, button2)
@@ -173,7 +191,7 @@ fun MainScreenDemo004() {
                 start.linkTo(parent.start, margin = 8.dp)
             })
 
-        FirstButton(text = "Button3", modifier = Modifier.constrainAs(button3){
+        FirstButton(text = "Button3", modifier = Modifier.constrainAs(button3) {
             linkTo(parent.top, parent.bottom, topMargin = 8.dp, bottomMargin = 8.dp)
             linkTo(button1.end, parent.end, startMargin = 30.dp, endMargin = 8.dp)
             start.linkTo(barrier, margin = 30.dp)
@@ -182,9 +200,11 @@ fun MainScreenDemo004() {
         })
 
         val constraints = testConstraintSet(margin = 15.dp)
-        FirstButton(text = "Button4", modifier = Modifier
-            .size(200.dp)
-            .layoutId("button4"))
+        FirstButton(
+            text = "Button4", modifier = Modifier
+                .size(200.dp)
+                .layoutId("button4")
+        )
 
     }
 }
@@ -204,22 +224,22 @@ private fun testConstraintSet(margin: Dp): ConstraintSet {
 
 @Composable
 fun MainScreenDemo003() {
-    ConstraintLayout(modifier =  Modifier.size(width = 400.dp, height = 250.dp)) {
+    ConstraintLayout(modifier = Modifier.size(width = 400.dp, height = 250.dp)) {
         val (button1, button2, button3) = createRefs()
 
         val guide = createGuidelineFromStart(fraction = 0.60f)
 
-        FirstButton(text = "Button 1", modifier = Modifier.constrainAs(button1){
+        FirstButton(text = "Button 1", modifier = Modifier.constrainAs(button1) {
             top.linkTo(parent.top, margin = 30.dp)
             end.linkTo(guide, margin = 30.dp)
         })
 
-        FirstButton(text = "Button 2", modifier = Modifier.constrainAs(button2){
+        FirstButton(text = "Button 2", modifier = Modifier.constrainAs(button2) {
             top.linkTo(button1.bottom, margin = 20.dp)
             start.linkTo(guide, margin = 40.dp)
         })
 
-        FirstButton(text = "Button 3", modifier = Modifier.constrainAs(button3){
+        FirstButton(text = "Button 3", modifier = Modifier.constrainAs(button3) {
 //            top.linkTo(button2.bottom, margin = 40.dp)
 //            end.linkTo(guide, margin = 20.dp)
             linkTo(parent.top, parent.bottom, topMargin = 8.dp, bottomMargin = 8.dp)
@@ -233,22 +253,22 @@ fun MainScreenDemo003() {
 
 @Composable
 fun MainScreenDemo002() {
-    ConstraintLayout(modifier =  Modifier.size(width = 400.dp, height = 100.dp)) {
+    ConstraintLayout(modifier = Modifier.size(width = 400.dp, height = 100.dp)) {
         val (button1, button2, button3) = createRefs()
 
 
         //Version 02
         createHorizontalChain(button1, button2, button3)
 
-        FirstButton(text = "Button 1", modifier = Modifier.constrainAs(button1){
+        FirstButton(text = "Button 1", modifier = Modifier.constrainAs(button1) {
             centerVerticallyTo(parent)
         })
 
-        FirstButton(text = "Button 2", modifier = Modifier.constrainAs(button2){
+        FirstButton(text = "Button 2", modifier = Modifier.constrainAs(button2) {
             centerVerticallyTo(parent)
         })
 
-        FirstButton(text = "Button 3", modifier = Modifier.constrainAs(button3){
+        FirstButton(text = "Button 3", modifier = Modifier.constrainAs(button3) {
             centerVerticallyTo(parent)
         })
 
@@ -276,11 +296,12 @@ fun MainScreenDemo002() {
 
 
 @Composable
-fun MainScreenDemo001(){
+fun MainScreenDemo001() {
     ConstraintLayout(
         Modifier
             .size(width = 200.dp, height = 300.dp)
-            .background(Color.Green)) {
+            .background(Color.Green)
+    ) {
         val text001 = createRef()
         Text(text = "Test 01 Constraints", modifier = Modifier.constrainAs(text001) {
             top.linkTo(parent.top, margin = 16.dp)
@@ -311,7 +332,6 @@ fun FirstButton(text: String, modifier: Modifier = Modifier) {
         Text(text = text)
     }
 }
-
 
 
 @Preview(showSystemUi = true)
