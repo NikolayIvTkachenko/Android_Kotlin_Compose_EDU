@@ -568,20 +568,20 @@ fun TitleImage(drawing: Int) {
 }
 
 
-@Preview(showSystemUi = true)
-@Composable
-fun DemoPreview() {
-    //DemoScreen000()
-    //MainScreen02()
-    //MainScreen03()
-    //MainScreen04()
-    //MainScreen05()
-    MainScreen06()
-
-//    CheckBoxes(
-//        linearSelected = true,
-//        imageSelected = true,
-//        onTitleClick = { },
-//        onLinearClick = { }
-//    )
-}
+//@Preview(showSystemUi = true)
+//@Composable
+//fun DemoPreview() {
+//    //DemoScreen000()
+//    //MainScreen02()
+//    //MainScreen03()
+//    //MainScreen04()
+//    //MainScreen05()
+//    MainScreen06()
+//
+////    CheckBoxes(
+////        linearSelected = true,
+////        imageSelected = true,
+////        onTitleClick = { },
+////        onLinearClick = { }
+////    )
+//}
