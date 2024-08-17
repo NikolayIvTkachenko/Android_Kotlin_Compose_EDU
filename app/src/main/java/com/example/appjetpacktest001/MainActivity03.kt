@@ -3,11 +3,15 @@ package com.example.appjetpacktest001
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -28,7 +38,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.graphics.Color
@@ -36,11 +48,17 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
+import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Language
+
+//https://metanit.com/kotlin/jetpack/2.10.php
+
 
 class MainActivity03 : ComponentActivity() {
 
@@ -60,12 +78,152 @@ class MainActivity03 : ComponentActivity() {
                     //MainScreenDemo005()
                     //MainScreenDemo006()
                     //MainScreenDemo007()
-                    MainScreenDemo008()
+                    //MainScreenDemo008()
+                    //MainScreenDemo009()
+                    MainScreenDemo011()
                 }
             }
         }
-
     }
+}
+
+
+@Composable
+fun MainScreenDemo011() {
+
+//    val langs = listOf(Language("Kotlin", 0xff16a085),
+//        Language("Java", 0xff2980b9),
+//        Language("JavaScript", 0xff8e44ad),
+//        Language("Python", 0xff2c3e50),
+//        Language("Rust",0xffd35400),
+//        Language("C#",0xff27ae60),
+//        Language("C++",0xfff39c12),
+//        Language("Go",0xff1abc9c))
+//    LazyVerticalGrid(
+//        columns = GridCells.FixedSize(size=140.dp),
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center
+//    ){
+//        items(langs) {lang ->
+//            Column(Modifier.padding(7.dp), horizontalAlignment = Alignment.CenterHorizontally){
+//                Box(Modifier.size(100.dp).background(Color(lang.hexColor)))
+//                Text(lang.name, fontSize = 24.sp)
+//            }
+//        }
+//    }
+
+//    val langs = listOf(Language("Kotlin", 0xff16a085),
+//        Language("Java", 0xff2980b9),
+//        Language("JavaScript", 0xff8e44ad),
+//        Language("Python", 0xff2c3e50),
+//        Language("Rust",0xffd35400),
+//        Language("C#",0xff27ae60),
+//        Language("C++",0xfff39c12),
+//        Language("Go",0xff1abc9c))
+//    LazyHorizontalGrid(
+//        rows = GridCells.Fixed(2),
+//        modifier = Modifier.fillMaxSize(),
+//        horizontalArrangement = Arrangement.Center
+//    ){
+//        items(langs) {lang ->
+//            Column(Modifier.padding(8.dp).size(125.dp), horizontalAlignment = Alignment.CenterHorizontally){
+//                Box(Modifier.size(100.dp).background(Color(lang.hexColor)))
+//                Text(lang.name, fontSize = 24.sp,modifier= Modifier.padding(5.dp))
+//            }
+//        }
+//    }
+
+//    val itemsList = (0..12).toList()
+//    LazyHorizontalGrid(
+//        rows = GridCells.Fixed(3),
+//        modifier = Modifier.fillMaxSize()
+//    ){
+//        items(itemsList) {item ->
+//            Text("Item $item", fontSize = 28.sp,modifier= Modifier.padding(8.dp))
+//        }
+//    }
+
+//    val listState = rememberLazyListState()
+//    val coroutineScope = rememberCoroutineScope()
+//    LazyColumn(state=listState) {
+//        item{Text("В конец", Modifier.padding(8.dp).background(Color.DarkGray).padding(5.dp).clickable {
+//            coroutineScope.launch() {
+//                listState.animateScrollToItem(19)
+//            }
+//        }, fontSize = 28.sp, color = Color.White)
+//        }
+//        items(20){
+//            Text("Item $it", Modifier.padding(8.dp), fontSize = 28.sp)
+//        }
+//    }
+}
+
+//https://metanit.com/kotlin/jetpack/2.11.php
+//https://metanit.com/kotlin/jetpack/2.10.php
+
+//val phones = listOf("Apple iPhone 12", "Google Pixel 4", "Google Pixel 6", "Samsung Galaxy 6s", "Samsung Galaxy 6s", "Google Pixel 4a", "Apple iPhone 8")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MainScreenDemo010() {
+    val phones = listOf("Apple iPhone 15 Pro", "Realme 11 PRO", "Google Pixel 5", "Samsung Galaxy S24 Ultra", "Google Pixel 6",
+        "Samsung Galaxy S21 FE", "Apple iPhone 15 Pro Max", "Xioami Redmi Note 12", "Xiaomi Redmi 12",
+        "Apple iPhone 13", "Google Pixel 6", "Apple iPhone 14",
+        "Realme C30s", "Realme Note 50")
+    // создаем группы
+    val groups = phones.groupBy { it.substringBefore(" ") }
+    LazyColumn(
+        contentPadding = PaddingValues(5.dp)
+    ){
+        groups.forEach { (brand, models) ->
+            stickyHeader {
+                Text(
+                    text = brand,
+                    fontSize = 28.sp,
+                    color = Color.White,
+                    modifier = Modifier.background(Color.Gray).padding(5.dp).fillMaxWidth()
+                )
+            }
+            items(models) { model ->
+                Text(model, Modifier.padding(5.dp), fontSize = 28.sp)
+            }
+        }
+    }
+}
+
+@Composable
+fun MainScreenDemo009() {
+    val scrollState = rememberScrollState()
+    //animateScrollTo
+    //scrollTo
+    val maxScrollPosition = scrollState.maxValue
+    val listState = rememberLazyListState()
+    val coroutinesScope = rememberCoroutineScope()
+
+    Column {
+
+        Button( onClick = {
+            coroutinesScope.launch {
+                scrollState.animateScrollTo(maxScrollPosition)
+            }
+        }) {
+            Text(text = "Press Me")
+        }
+
+        LazyColumn(state = listState) {
+            items(100) { index ->
+                Text(text = "Text sample = $index")
+            }
+        }
+    }
+
+
+
+
+//    Row(modifier = Modifier.horizontalScroll(scrollState)) {
+//        repeat(100) {
+//            TestListItem()
+//        }
+//    }
 }
 
 @Composable
@@ -344,5 +502,7 @@ fun DemoPreview() {
     //MainScreenDemo005()
     //MainScreenDemo006()
     //MainScreenDemo007()
-    MainScreenDemo008()
+    //MainScreenDemo008()
+    //MainScreenDemo009()
+    MainScreenDemo011()
 }
