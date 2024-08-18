@@ -101,11 +101,51 @@ class MainActivity03 : ComponentActivity() {
                     //MainScreenDemo011()
                     //MainScreenDemo012()
                     //MainScreenDemo013()
-                    MainScreenDemo014(itemArray = itemArray as Array<out String>)
+                    //MainScreenDemo014(itemArray = itemArray as Array<out String>)
+                    MainScreenDemo015(itemArray = itemArray as Array<out String>)
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MainScreenDemo015(itemArray: Array<out String>) {
+    val context = LocalContext.current
+    val groupedItems = itemArray.groupBy { it.substringBefore(' ') }
+
+    val onListItemClick = { text : String ->
+        Toast.makeText(
+            context,
+            text,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    LazyColumn{
+        groupedItems.forEach{ (manufacturer, models) ->
+            stickyHeader {
+                Text(
+                    text = manufacturer,
+                    color = Color.White,
+                    modifier = Modifier.background(Color.Gray)
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                )
+            }
+
+
+            items(models) { model ->
+                Test02ListItem(
+                    item = model,
+                    onItemClick = onListItemClick
+                )
+            }
+        }
+
+    }
+
 }
 
 
@@ -735,5 +775,6 @@ fun DemoPreview() {
     //MainScreenDemo013()
 
     val itemArray: Array<String> = arrayOf("Cadillac Eldorado", "Ford Fairlane", "Plymouth Fury")
-    MainScreenDemo014(itemArray = itemArray)
+    //MainScreenDemo014(itemArray = itemArray)
+    MainScreenDemo015(itemArray = itemArray)
 }
