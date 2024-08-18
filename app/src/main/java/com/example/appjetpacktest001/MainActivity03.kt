@@ -1,6 +1,7 @@
 package com.example.appjetpacktest001
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -53,6 +54,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -108,11 +110,14 @@ class MainActivity03 : ComponentActivity() {
 
 
 @Composable
-fun Test02ListItem(item: String) {
+fun Test02ListItem(item: String, onItemClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onItemClick(item)
+            },
         shape = RoundedCornerShape(10.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
@@ -134,7 +139,26 @@ fun Test02ListItem(item: String) {
 fun MainScreenDemo014(itemArray: Array<out String>) {
 
     //ImageLoader("Plymouth GTX")
-    Test02ListItem("Buick Roadmaster")
+    //Test02ListItem("Buick Roadmaster")
+
+    val context = LocalContext.current
+
+    val onListItemClick = { text : String ->
+        Toast.makeText(
+            context,
+            text,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    LazyColumn{
+        items(itemArray) { model ->
+            Test02ListItem(
+                item = model,
+                onItemClick = onListItemClick
+            )
+        }
+    }
 
 }
 
