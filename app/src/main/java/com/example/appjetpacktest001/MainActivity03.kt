@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +29,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -42,9 +44,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -80,7 +84,8 @@ class MainActivity03 : ComponentActivity() {
                     //MainScreenDemo007()
                     //MainScreenDemo008()
                     //MainScreenDemo009()
-                    MainScreenDemo011()
+                    //MainScreenDemo011()
+                    MainScreenDemo012()
                 }
             }
         }
@@ -89,7 +94,45 @@ class MainActivity03 : ComponentActivity() {
 
 
 @Composable
+fun MainScreenDemo012() {
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        contentPadding = PaddingValues(10.dp)
+    ) {
+        items(15) {
+
+        }
+    }
+
+}
+
+
+@Composable
 fun MainScreenDemo011() {
+
+    LazyVerticalGrid(
+        //columns = GridCells.Adaptive(minSize = 60.dp),
+        columns = GridCells.Fixed(5),
+        contentPadding =  PaddingValues(10.dp),
+        content = {
+            items(500) { index ->
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(Color.Blue),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Item $index",
+                        fontSize = 15.sp,
+                        color = Color.White, textAlign = TextAlign.Center
+                    )
+                }
+            }
+        })
 
 //    val langs = listOf(Language("Kotlin", 0xff16a085),
 //        Language("Java", 0xff2980b9),
@@ -180,7 +223,10 @@ fun MainScreenDemo010() {
                     text = brand,
                     fontSize = 28.sp,
                     color = Color.White,
-                    modifier = Modifier.background(Color.Gray).padding(5.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .background(Color.Gray)
+                        .padding(5.dp)
+                        .fillMaxWidth()
                 )
             }
             items(models) { model ->
@@ -504,5 +550,6 @@ fun DemoPreview() {
     //MainScreenDemo007()
     //MainScreenDemo008()
     //MainScreenDemo009()
-    MainScreenDemo011()
+    //MainScreenDemo011()
+    MainScreenDemo012()
 }
