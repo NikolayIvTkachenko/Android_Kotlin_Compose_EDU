@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +34,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,6 +51,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,18 +61,25 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import coil.compose.rememberImagePainter
 
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
 import kotlinx.coroutines.launch
 import org.intellij.lang.annotations.Language
 
-//https://metanit.com/kotlin/jetpack/2.10.php
 
+//https://metanit.com/kotlin/jetpack/2.10.php
+//https://developer.android.com/develop/ui/compose/components/chip?hl=ru
+//https://www.ebookfrenzy.com/retail/compose/index.php
 
 class MainActivity03 : ComponentActivity() {
 
+    private var itemArray: Array<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        itemArray = resources.getStringArray(R.array.car_array)
 
         setContent {
             AppJetPackTest001Theme {
@@ -85,11 +97,127 @@ class MainActivity03 : ComponentActivity() {
                     //MainScreenDemo008()
                     //MainScreenDemo009()
                     //MainScreenDemo011()
-                    MainScreenDemo012()
+                    //MainScreenDemo012()
+                    //MainScreenDemo013()
+                    MainScreenDemo014(itemArray = itemArray as Array<out String>)
                 }
             }
         }
     }
+}
+
+
+@Composable
+fun Test02ListItem(item: String) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(10.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        )
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            ImageLoader(item = item)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = item,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun MainScreenDemo014(itemArray: Array<out String>) {
+
+    //ImageLoader("Plymouth GTX")
+    Test02ListItem("Buick Roadmaster")
+
+}
+
+@Composable
+fun ImageLoader(item: String) {
+    val url = "https://www.ebookfrenzy.com/book_examples/car_logos/" + item.substringBefore(" ") + "_logo.png"
+    Image(
+        painter = rememberImagePainter(url),
+        contentDescription = "Car Image",
+        contentScale = ContentScale.Fit,
+        modifier = Modifier.size(75.dp)
+    )
+}
+
+
+//List Demo Project
+
+@Composable
+fun RowList() {
+    val scrollState = rememberScrollState()
+
+    Row(modifier = Modifier.horizontalScroll(scrollState)) {
+        repeat(50) {index ->
+            Text(
+                text = " $index",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(5.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ColumnList() {
+    val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope()
+
+    Column {
+        RowList()
+        Row {
+            Button(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .padding(2.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        scrollState.animateScrollTo(0)
+                    }
+                }
+            ) {
+                Text(text = "Top")
+            }
+            Button(
+                modifier = Modifier
+                    .weight(0.5f)
+                    .padding(2.dp),
+                onClick = {
+                    coroutineScope.launch {
+                        scrollState.animateScrollTo(scrollState.maxValue)
+                    }
+                }
+            ) {
+                Text(text = "End")
+            }
+        }
+
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            repeat(500) {
+                Text(
+                    text = "List Item $it",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(5.dp)
+                )
+            }
+        }
+    }
+
+
+}
+@Composable
+fun MainScreenDemo013() {
+    ColumnList()
 }
 
 
@@ -100,8 +228,27 @@ fun MainScreenDemo012() {
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(10.dp)
     ) {
-        items(15) {
-
+        items(15) {index ->
+            Card(
+//                colors = CardDefaults.cardColors(
+//                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+//                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Blue,
+                ),
+                modifier = Modifier
+                    .size(width = 240.dp, height = 100.dp)
+                    .padding(5.dp)
+            ) {
+                Text(
+                    text = "$index",
+                    fontSize = 35.sp,
+                    color = Color.White,
+//                    modifier = Modifier
+//                        .padding(16.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 
@@ -114,7 +261,7 @@ fun MainScreenDemo011() {
     LazyVerticalGrid(
         //columns = GridCells.Adaptive(minSize = 60.dp),
         columns = GridCells.Fixed(5),
-        contentPadding =  PaddingValues(10.dp),
+        contentPadding = PaddingValues(10.dp),
         content = {
             items(500) { index ->
                 Box(
@@ -208,15 +355,27 @@ fun MainScreenDemo011() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreenDemo010() {
-    val phones = listOf("Apple iPhone 15 Pro", "Realme 11 PRO", "Google Pixel 5", "Samsung Galaxy S24 Ultra", "Google Pixel 6",
-        "Samsung Galaxy S21 FE", "Apple iPhone 15 Pro Max", "Xioami Redmi Note 12", "Xiaomi Redmi 12",
-        "Apple iPhone 13", "Google Pixel 6", "Apple iPhone 14",
-        "Realme C30s", "Realme Note 50")
+    val phones = listOf(
+        "Apple iPhone 15 Pro",
+        "Realme 11 PRO",
+        "Google Pixel 5",
+        "Samsung Galaxy S24 Ultra",
+        "Google Pixel 6",
+        "Samsung Galaxy S21 FE",
+        "Apple iPhone 15 Pro Max",
+        "Xioami Redmi Note 12",
+        "Xiaomi Redmi 12",
+        "Apple iPhone 13",
+        "Google Pixel 6",
+        "Apple iPhone 14",
+        "Realme C30s",
+        "Realme Note 50"
+    )
     // создаем группы
     val groups = phones.groupBy { it.substringBefore(" ") }
     LazyColumn(
         contentPadding = PaddingValues(5.dp)
-    ){
+    ) {
         groups.forEach { (brand, models) ->
             stickyHeader {
                 Text(
@@ -247,7 +406,7 @@ fun MainScreenDemo009() {
 
     Column {
 
-        Button( onClick = {
+        Button(onClick = {
             coroutinesScope.launch {
                 scrollState.animateScrollTo(maxScrollPosition)
             }
@@ -261,8 +420,6 @@ fun MainScreenDemo009() {
             }
         }
     }
-
-
 
 
 //    Row(modifier = Modifier.horizontalScroll(scrollState)) {
@@ -288,7 +445,6 @@ fun MainScreenDemo008() {
 //        }
 //    }
 }
-
 
 
 @Composable
@@ -538,7 +694,7 @@ fun FirstButton(text: String, modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DemoPreview() {
     //MainScreenDemo001()
@@ -551,5 +707,9 @@ fun DemoPreview() {
     //MainScreenDemo008()
     //MainScreenDemo009()
     //MainScreenDemo011()
-    MainScreenDemo012()
+    //MainScreenDemo012()
+    //MainScreenDemo013()
+
+    val itemArray: Array<String> = arrayOf("Cadillac Eldorado", "Ford Fairlane", "Plymouth Fury")
+    MainScreenDemo014(itemArray = itemArray)
 }
