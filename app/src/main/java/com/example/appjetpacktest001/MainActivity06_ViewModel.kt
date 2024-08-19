@@ -143,13 +143,14 @@ fun InputRow(
             }
         )
 
+        //Анимация для значка типа температуры
         Crossfade(
             targetState = isFahrenheit,
             animationSpec = tween(2000)
         ) { visible ->
             when (visible) {
                 true -> Text("\u2109", style = MaterialTheme.typography.labelSmall)
-                false -> Text("\u2103", style = MaterialTheme.typography.labelSmall)
+                false -> Text("\u2103", style = MaterialTheme.typography.labelLarge)
             }
         }
     }
