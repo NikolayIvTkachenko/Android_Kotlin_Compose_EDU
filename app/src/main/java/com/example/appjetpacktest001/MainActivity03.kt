@@ -5,6 +5,19 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -54,11 +67,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.focusModifier
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -67,6 +83,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
 import coil.compose.rememberImagePainter
 
 import com.example.appjetpacktest001.ui.theme.AppJetPackTest001Theme
@@ -106,12 +123,199 @@ class MainActivity03 : ComponentActivity() {
                     //MainScreenDemo012()
                     //MainScreenDemo013()
                     //MainScreenDemo014(itemArray = itemArray as Array<out String>)
-                    MainScreenDemo015(itemArray = itemArray as Array<out String>)
+                    //MainScreenDemo015(itemArray = itemArray as Array<out String>)
+                    //MainScreenDemo016()
+                    //MainScreenDemo17()
+                    MainScreenDemo18()
                 }
             }
         }
     }
 }
+
+
+enum class BoxColor {
+    Red, Magenta
+}
+
+@Composable
+fun RotationDemo() {
+
+    var rotated by remember { mutableStateOf(false) }
+
+    val angle by animateFloatAsState(
+        targetValue = if (rotated) 360f else 0f,
+        animationSpec = tween(durationMillis = 2500, easing = LinearEasing)
+    )
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(R.drawable.propeller),
+            contentDescription = "fan",
+            modifier = Modifier
+                .rotate(angle)
+                .padding(10.dp)
+                .size(300.dp)
+        )
+
+        Button(
+            onClick = { rotated = !rotated },
+            modifier = Modifier.padding(10.dp)
+        ) {
+            Text(text = "Rotate Propeller")
+        }
+    }
+}
+
+@Composable
+fun TemperatureControl01() {
+    var temperature by remember { mutableStateOf(20) }
+    val animatedColor: Color by animateColorAsState(
+        targetValue = if (temperature > 92) {
+            Color.Red
+        } else {
+            Color.Green
+        },
+        animationSpec = tween(4500)
+    )
+    Box(
+        modifier = Modifier.size(width = 20.dp, height = 200.dp).background(animatedColor)
+    )
+}
+
+@Composable
+fun MainScreenDemo18() {
+    //TemperatureControl01()
+    RotationDemo()
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun MainScreenDemo17() {
+    var boxVisible by remember { mutableStateOf(true) }
+
+    val onClick = { newState : Boolean ->
+        boxVisible = newState
+    }
+
+    Column(
+        Modifier.padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Crossfade(
+                targetState = boxVisible,
+                animationSpec = tween(5000)
+            ) { visible ->
+                when (visible) {
+                    true -> CustomButton(text = "Hide", targetState = false,
+                        onClick = onClick, bgColor = Color.Red)
+                    false -> CustomButton(text = "Show", targetState = true,
+                        onClick = onClick, bgColor = Color.Magenta)
+                }
+            }
+
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        AnimatedVisibility(
+            visible = boxVisible,
+            enter = EnterTransition.None,
+            exit = ExitTransition.None
+        ) {
+            Row {
+                Box(
+                    Modifier
+                        .animateEnterExit(
+                            enter = fadeIn(animationSpec = tween(durationMillis = 5500)),
+                            exit = fadeOut(animationSpec = tween(durationMillis = 5500))
+                        )
+                        .size(width = 150.dp, height = 150.dp)
+                        .background(Color.Blue))
+                Spacer(modifier = Modifier.width(20.dp))
+                Box(
+                    Modifier
+                        .animateEnterExit(
+                            enter = slideInVertically(
+                                animationSpec = tween(durationMillis = 5500)
+                            ),
+                            exit = slideOutVertically(
+                                animationSpec = tween(durationMillis = 5500)
+                            )
+                        )
+                        .size(width = 150.dp, height = 150.dp)
+                        .background(Color.Red)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomButton(
+    text: String,
+    targetState: Boolean,
+    onClick: (Boolean) -> Unit,
+    bgColor: Color = Color.Blue
+) {
+    Button(
+        onClick = {
+            onClick(targetState)
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = bgColor,
+            contentColor = Color.White
+        )
+    ) {
+        Text(text = text)
+    }
+}
+
+@Composable
+fun MainScreenDemo016() {
+
+    var boxVisible by remember { mutableStateOf(true) }
+    val onClick = { newState: Boolean ->
+        boxVisible = newState
+    }
+
+
+    Column(
+        modifier = Modifier.padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            CustomButton(text = "Show", targetState = true, onClick = onClick)
+            CustomButton(text = "Hide", targetState = false, onClick = onClick)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        if (boxVisible) {
+            Box(
+                modifier = Modifier
+                    .size(height = 200.dp, width = 200.dp)
+                    .background(Color.Blue)
+            )
+        }
+    }
+}
+
+//AnimatedVisibility(
+//            visible = boxVisible,
+//            enter = fadeIn(animationSpec = tween(durationMillis = 5500)) + expandHorizontally(),
+//            exit = fadeOut(animationSpec = tween(durationMillis = 5500))  //slideOutVertically()
+//        ) {
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -124,7 +328,7 @@ fun MainScreenDemo015(itemArray: Array<out String>) {
     val context = LocalContext.current
     val groupedItems = itemArray.groupBy { it.substringBefore(' ') }
 
-    val onListItemClick = { text : String ->
+    val onListItemClick = { text: String ->
         Toast.makeText(
             context,
             text,
@@ -132,12 +336,12 @@ fun MainScreenDemo015(itemArray: Array<out String>) {
         ).show()
     }
 
-    Box{
+    Box {
         LazyColumn(
             state = listState,
             contentPadding = PaddingValues(bottom = 40.dp)
-        ){
-            groupedItems.forEach{ (manufacturer, models) ->
+        ) {
+            groupedItems.forEach { (manufacturer, models) ->
                 stickyHeader {
                     Text(
                         text = manufacturer,
@@ -219,7 +423,7 @@ fun MainScreenDemo014(itemArray: Array<out String>) {
 
     val context = LocalContext.current
 
-    val onListItemClick = { text : String ->
+    val onListItemClick = { text: String ->
         Toast.makeText(
             context,
             text,
@@ -227,7 +431,7 @@ fun MainScreenDemo014(itemArray: Array<out String>) {
         ).show()
     }
 
-    LazyColumn{
+    LazyColumn {
         items(itemArray) { model ->
             Test02ListItem(
                 item = model,
@@ -240,7 +444,8 @@ fun MainScreenDemo014(itemArray: Array<out String>) {
 
 @Composable
 fun ImageLoader(item: String) {
-    val url = "https://www.ebookfrenzy.com/book_examples/car_logos/" + item.substringBefore(" ") + "_logo.png"
+    val url =
+        "https://www.ebookfrenzy.com/book_examples/car_logos/" + item.substringBefore(" ") + "_logo.png"
     Image(
         painter = rememberImagePainter(url),
         contentDescription = "Car Image",
@@ -257,7 +462,7 @@ fun RowList() {
     val scrollState = rememberScrollState()
 
     Row(modifier = Modifier.horizontalScroll(scrollState)) {
-        repeat(50) {index ->
+        repeat(50) { index ->
             Text(
                 text = " $index",
                 style = MaterialTheme.typography.bodyLarge,
@@ -315,6 +520,7 @@ fun ColumnList() {
 
 
 }
+
 @Composable
 fun MainScreenDemo013() {
     ColumnList()
@@ -328,7 +534,7 @@ fun MainScreenDemo012() {
         columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(10.dp)
     ) {
-        items(15) {index ->
+        items(15) { index ->
             Card(
 //                colors = CardDefaults.cardColors(
 //                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -812,5 +1018,8 @@ fun DemoPreview() {
 
     val itemArray: Array<String> = arrayOf("Cadillac Eldorado", "Ford Fairlane", "Plymouth Fury")
     //MainScreenDemo014(itemArray = itemArray)
-    MainScreenDemo015(itemArray = itemArray)
+    //MainScreenDemo015(itemArray = itemArray)
+    //MainScreenDemo016()
+    //MainScreenDemo17()
+    MainScreenDemo18()
 }
