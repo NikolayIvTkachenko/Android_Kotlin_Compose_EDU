@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,9 +37,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -112,6 +116,11 @@ class MainActivity03 : ComponentActivity() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreenDemo015(itemArray: Array<out String>) {
+
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    val displayButton = listState.firstVisibleItemIndex > 5
+
     val context = LocalContext.current
     val groupedItems = itemArray.groupBy { it.substringBefore(' ') }
 
@@ -123,29 +132,56 @@ fun MainScreenDemo015(itemArray: Array<out String>) {
         ).show()
     }
 
-    LazyColumn{
-        groupedItems.forEach{ (manufacturer, models) ->
-            stickyHeader {
-                Text(
-                    text = manufacturer,
-                    color = Color.White,
-                    modifier = Modifier.background(Color.Gray)
-                        .padding(5.dp)
-                        .fillMaxWidth()
-                )
-            }
+    Box{
+        LazyColumn(
+            state = listState,
+            contentPadding = PaddingValues(bottom = 40.dp)
+        ){
+            groupedItems.forEach{ (manufacturer, models) ->
+                stickyHeader {
+                    Text(
+                        text = manufacturer,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(Color.Gray)
+                            .padding(5.dp)
+                            .fillMaxWidth()
+                    )
+                }
 
 
-            items(models) { model ->
-                Test02ListItem(
-                    item = model,
-                    onItemClick = onListItemClick
-                )
+                items(models) { model ->
+                    Test02ListItem(
+                        item = model,
+                        onItemClick = onListItemClick
+                    )
+                }
             }
         }
 
+        AnimatedVisibility(
+            visible = displayButton,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            OutlinedButton(
+                onClick = {
+                    coroutineScope.launch {
+                        listState.scrollToItem(0)
+                    }
+                },
+                border = BorderStroke(2.dp, Color.Gray),
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.DarkGray
+                ),
+                modifier = Modifier.padding(5.dp)
+            ) {
+                Text(
+                    text = "Top"
+                )
+            }
+        }
     }
-
 }
 
 
