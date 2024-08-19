@@ -9,10 +9,17 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
+import androidx.compose.animation.core.Spring.StiffnessVeryLow
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -35,6 +42,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -73,6 +81,7 @@ import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -133,6 +142,144 @@ class MainActivity03 : ComponentActivity() {
     }
 }
 
+enum class BoxPosition {
+    Start, End
+}
+
+
+@Composable
+fun TransitionDemo() {
+    var boxState by remember { mutableStateOf(BoxPosition.Start)}
+    var screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val transition = updateTransition(targetState = boxState,
+        label = "Color and Motion")
+
+    val animatedColor: Color by transition.animateColor(
+
+        transitionSpec = {
+            tween(4000)
+        }
+
+    ) { state ->
+        when (state) {
+            BoxPosition.Start -> Color.Red
+            BoxPosition.End -> Color.Magenta
+        }
+    }
+
+    val animatedOffset: Dp by transition.animateDp(
+
+        transitionSpec = {
+            tween(4000)
+        }
+    ) { state ->
+        when (state) {
+            BoxPosition.Start -> 0.dp
+            BoxPosition.End -> screenWidth - 70.dp
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .offset(x = animatedOffset, y = 20.dp)
+                .size(70.dp)
+                .background(animatedColor)
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+
+        Button(
+            onClick = {
+                boxState = when (boxState) {
+                    BoxPosition.Start -> BoxPosition.End
+                    BoxPosition.End -> BoxPosition.Start
+                }
+            },
+            modifier = Modifier.padding(20.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Start Animation")
+        }
+    }
+}
+
+
+@Composable
+fun MotionDemo() {
+
+    val screenWidth = (LocalConfiguration.current.screenWidthDp.dp)
+    var boxState by remember { mutableStateOf(BoxPosition.Start)}
+    val boxSideLength = 70.dp
+
+    val animatedOffset: Dp by animateDpAsState(
+        targetValue = when (boxState) {
+            BoxPosition.Start -> 0.dp
+            BoxPosition.End -> screenWidth - boxSideLength
+        },
+        spring(dampingRatio = DampingRatioHighBouncy, stiffness = StiffnessVeryLow)
+    )
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .offset(x = animatedOffset, y = 20.dp)
+                .size(boxSideLength)
+                .background(Color.Red)
+        )
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        Button(
+            onClick = {
+                boxState = when (boxState) {
+                    BoxPosition.Start -> BoxPosition.End
+                    BoxPosition.End -> BoxPosition.Start
+                }
+            },
+            modifier = Modifier.padding(20.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Move Box")
+        }
+    }
+}
+
+
+@Composable
+fun ColorChangeDemo() {
+
+    var colorState by remember { mutableStateOf(BoxColor.Red) }
+
+    val animatedColor: Color by animateColorAsState(
+        targetValue = when (colorState) {
+            BoxColor.Red -> Color.Magenta
+            BoxColor.Magenta -> Color.Red
+        },
+        animationSpec = tween(4500)
+    )
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .padding(20.dp)
+                .size(200.dp)
+                .background(animatedColor)
+        )
+
+        Button(
+            onClick = {
+                colorState = when (colorState) {
+                    BoxColor.Red -> BoxColor.Magenta
+                    BoxColor.Magenta -> BoxColor.Red
+                }
+            },
+            modifier = Modifier.padding(10.dp)
+        ) {
+            Text(text = "Change Color")
+        }
+    }
+}
 
 enum class BoxColor {
     Red, Magenta
@@ -187,7 +334,10 @@ fun TemperatureControl01() {
 @Composable
 fun MainScreenDemo18() {
     //TemperatureControl01()
-    RotationDemo()
+    //RotationDemo()
+    //ColorChangeDemo()
+    //MotionDemo()
+    TransitionDemo()
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -1000,26 +1150,26 @@ fun FirstButton(text: String, modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DemoPreview() {
-    //MainScreenDemo001()
-    //MainScreenDemo002()
-    //MainScreenDemo003()
-    //MainScreenDemo004()
-    //MainScreenDemo005()
-    //MainScreenDemo006()
-    //MainScreenDemo007()
-    //MainScreenDemo008()
-    //MainScreenDemo009()
-    //MainScreenDemo011()
-    //MainScreenDemo012()
-    //MainScreenDemo013()
-
-    val itemArray: Array<String> = arrayOf("Cadillac Eldorado", "Ford Fairlane", "Plymouth Fury")
-    //MainScreenDemo014(itemArray = itemArray)
-    //MainScreenDemo015(itemArray = itemArray)
-    //MainScreenDemo016()
-    //MainScreenDemo17()
-    MainScreenDemo18()
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun DemoPreview() {
+//    //MainScreenDemo001()
+//    //MainScreenDemo002()
+//    //MainScreenDemo003()
+//    //MainScreenDemo004()
+//    //MainScreenDemo005()
+//    //MainScreenDemo006()
+//    //MainScreenDemo007()
+//    //MainScreenDemo008()
+//    //MainScreenDemo009()
+//    //MainScreenDemo011()
+//    //MainScreenDemo012()
+//    //MainScreenDemo013()
+//
+//    val itemArray: Array<String> = arrayOf("Cadillac Eldorado", "Ford Fairlane", "Plymouth Fury")
+//    //MainScreenDemo014(itemArray = itemArray)
+//    //MainScreenDemo015(itemArray = itemArray)
+//    //MainScreenDemo016()
+//    //MainScreenDemo17()
+//    MainScreenDemo18()
+//}
