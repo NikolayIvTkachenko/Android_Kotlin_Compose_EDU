@@ -1,7 +1,11 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
+    kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    //alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    //alias(libs.plugins.hilt.plugin)
+    //alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -50,6 +54,8 @@ android {
     }
 }
 
+//https://kotlinlang.org/docs/kapt.html#non-existent-type-correction
+
 dependencies {
 
     implementation(libs.core.ktx)
@@ -74,4 +80,13 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("io.coil-kt:coil-compose:1.3.2")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
+
+    implementation("androidx.room:room-runtime:2.4.2")
+    implementation ("androidx.room:room-ktx:2.4.2")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.1.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    annotationProcessor ("androidx.room:room-compiler:2.4.2")
+    kapt("androidx.room:room-compiler:2.4.2")
 }
