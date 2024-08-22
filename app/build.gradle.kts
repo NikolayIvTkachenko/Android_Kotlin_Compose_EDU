@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
+    implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -89,4 +90,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     annotationProcessor ("androidx.room:room-compiler:2.4.2")
     kapt("androidx.room:room-compiler:2.4.2")
+
+    implementation("androidx.navigation:navigation-compose:2.4.0")
+
 }
