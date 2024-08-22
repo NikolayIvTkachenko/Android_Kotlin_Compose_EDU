@@ -93,4 +93,8 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.4.0")
 
+    //BottomNavigation
+    //BottomNavigationItem
+    implementation("androidx.compose.material:material:1.4.2")
+
 }
