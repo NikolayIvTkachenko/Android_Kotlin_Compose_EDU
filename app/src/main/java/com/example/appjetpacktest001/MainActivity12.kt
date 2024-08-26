@@ -112,3 +112,9 @@ fun MainScreenViewModel001() {
     Log.d("FLOW_TEST", "MainScreenViewModel001()")
 
 }
+
+//MVVM_DaggerHilt
+//https://www.youtube.com/watch?v=t3ZonTbwzAs&list=PLRKyZvuMYSINkJXNAdJwZofK-1WvFeyqO&index=1
+//https://www.youtube.com/watch?v=uUBcyvw3uDE&list=PLRKyZvuMYSINkJXNAdJwZofK-1WvFeyqO&index=2
+
+//https://www.youtube.com/watch?v=RS15OI5G-cc&list=PLRKyZvuMYSINkJXNAdJwZofK-1WvFeyqO&index=7
